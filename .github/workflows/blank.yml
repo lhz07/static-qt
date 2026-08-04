@@ -24,6 +24,8 @@ jobs:
 
       - name: setup
         run: |
+          sudo apt update
+          sudo apt install -y build-essential libgl1-mesa-dev libwayland-dev wayland-protocols libwayland-egl1
           mkdir static-qt
           wget -q https://download.qt.io/official_releases/qt/6.11/6.11.0/single/qt-everywhere-src-6.11.0.tar.xz
           tar -xf qt-everywhere-src-6.11.0.tar.xz
