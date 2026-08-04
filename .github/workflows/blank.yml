@@ -6,18 +6,50 @@ jobs:
     name: Build my artifact
     runs-on: ubuntu-22.04
     steps:
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
-        with:
-          remove-dotnet: 'true'
-          remove-android: 'true'
-          remove-haskell: 'true'
-          remove-codeql: 'true'
-          remove-docker-images: 'true'
-      - name: Checkout
-        uses: actions/checkout@v3
+      # - name: Maximize build space
+      #   uses: easimon/maximize-build-space@master
+      #   with:
+      #     remove-dotnet: 'true'
+      #     remove-android: 'true'
+      #     remove-haskell: 'true'
+      #     remove-codeql: 'true'
+      #     remove-docker-images: 'true'
+      # - name: Checkout
+      #   uses: actions/checkout@v3
 
       - name: Build
         run: |
           echo "Free space:"
           df -h
+
+      - name: setup
+        run: |
+          cd /root
+          mkdir static-qt
+          wget https://download.qt.io/official_releases/qt/6.11/6.11.0/single/qt-everywhere-src-6.11.0.zip
+          tar -xzf qt-everywhere-src-6.11.0.zip
+          cd qt-everywhere-src-6.11.0
+          mkdir build
+          cd build
+    
+      - name: configure
+        run: ../configure -static -release -no-pch -prefix "/root/static-qt" -skip webengine -nomake tools -nomake tests -nomake examples
+      
+      - name: Build
+        run: cmake --build . --parallel
+
+      - name: install
+        run: cmake --install .
+
+      - name: pack
+        run: |
+          cd ..
+          tar -czf static-qt.tar.gz static-qt
+          
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-qt
+          path: static-qt.tar.gz
+          if-no-files-found: ignore
+          
