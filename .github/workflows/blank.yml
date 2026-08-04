@@ -24,7 +24,6 @@ jobs:
 
       - name: setup
         run: |
-          cd /root
           mkdir static-qt
           wget https://download.qt.io/official_releases/qt/6.11/6.11.0/single/qt-everywhere-src-6.11.0.zip
           tar -xzf qt-everywhere-src-6.11.0.zip
@@ -33,7 +32,7 @@ jobs:
           cd build
     
       - name: configure
-        run: ../configure -static -release -no-pch -prefix "/root/static-qt" -skip webengine -nomake tools -nomake tests -nomake examples
+        run: ../configure -static -release -no-pch -prefix "$GITHUB_WORKSPACE/static-qt" -skip webengine -nomake tools -nomake tests -nomake examples
       
       - name: Build
         run: cmake --build . --parallel
@@ -43,7 +42,7 @@ jobs:
 
       - name: pack
         run: |
-          cd ..
+          cd ../..
           tar -czf static-qt.tar.gz static-qt
           
       - name: upload
