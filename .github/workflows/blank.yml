@@ -33,7 +33,7 @@ jobs:
       - name: configure
         run: |
           cd qt-everywhere-src-6.11.0/build
-          ../configure -static -release -no-pch -prefix "$GITHUB_WORKSPACE/static-qt" -skip webengine -nomake tools -nomake tests -nomake examples -opensource -confirm-license
+          ../configure -static -release -no-pch -prefix "$GITHUB_WORKSPACE/static-qt" -skip webengine -nomake tests -nomake examples -opensource -confirm-license
       
       - name: Build
         run: |
