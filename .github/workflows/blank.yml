@@ -25,8 +25,8 @@ jobs:
       - name: setup
         run: |
           mkdir static-qt
-          wget https://download.qt.io/official_releases/qt/6.11/6.11.0/single/qt-everywhere-src-6.11.0.zip
-          tar -xzf qt-everywhere-src-6.11.0.zip
+          wget -q https://download.qt.io/official_releases/qt/6.11/6.11.0/single/qt-everywhere-src-6.11.0.zip
+          unzip qt-everywhere-src-6.11.0.zip
           cd qt-everywhere-src-6.11.0
           mkdir build
           cd build
