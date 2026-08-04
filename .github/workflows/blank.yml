@@ -35,7 +35,7 @@ jobs:
       - name: configure
         run: |
           cd qt-everywhere-src-6.11.1/build
-          ../configure -static -release -no-pch -prefix "$GITHUB_WORKSPACE/static-qt" -skip webengine -nomake tests -nomake examples -opensource -confirm-license
+          ../configure -static -release -no-pch -prefix "$GITHUB_WORKSPACE/static-qt" -skip qtwebengine -nomake tests -nomake examples -opensource -confirm-license
       
       - name: Build
         run: |
@@ -56,4 +56,51 @@ jobs:
           name: static-qt
           path: static-qt.tar.gz
           if-no-files-found: ignore
+
+  build1:
+    name: Build my artifact
+    runs-on: macos-15
+    steps:
+      # - name: Maximize build space
+      #   uses: easimon/maximize-build-space@master
+      #   with:
+      #     remove-dotnet: 'true'
+      #     remove-android: 'true'
+      #     remove-haskell: 'true'
+      #     remove-codeql: 'true'
+      #     remove-docker-images: 'true'
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+
+      - name: setup
+        run: |
+          mkdir static-qt
+          wget -q https://download.qt.io/official_releases/qt/6.11/6.11.1/single/qt-everywhere-src-6.11.1.tar.xz
+          tar -xf qt-everywhere-src-6.11.1.tar.xz
+          cd qt-everywhere-src-6.11.1
+          mkdir build
+    
+      - name: configure
+        run: |
+          cd qt-everywhere-src-6.11.1/build
+          ../configure -static -release -no-pch -prefix "$GITHUB_WORKSPACE/static-qt" -skip qtwebengine -nomake tests -nomake examples -opensource -confirm-license
+      
+      - name: Build
+        run: |
+          cd qt-everywhere-src-6.11.1/build
+          cmake --build . --parallel
+
+      - name: install
+        run: |
+          cd qt-everywhere-src-6.11.1/build
+          cmake --install .
+
+      - name: pack
+        run: tar -czf static-qt.tar.gz static-qt
           
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-qt
+          path: static-qt.tar.gz
+          if-no-files-found: ignore
