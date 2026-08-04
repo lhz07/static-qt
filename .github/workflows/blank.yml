@@ -27,24 +27,24 @@ jobs:
           sudo apt update
           sudo apt install -y build-essential libgl1-mesa-dev libwayland-dev wayland-protocols libwayland-egl1
           mkdir static-qt
-          wget -q https://download.qt.io/official_releases/qt/6.11/6.11.0/single/qt-everywhere-src-6.11.0.tar.xz
-          tar -xf qt-everywhere-src-6.11.0.tar.xz
-          cd qt-everywhere-src-6.11.0
+          wget -q https://download.qt.io/official_releases/qt/6.11/6.11.1/single/qt-everywhere-src-6.11.1.tar.xz
+          tar -xf qt-everywhere-src-6.11.1.tar.xz
+          cd qt-everywhere-src-6.11.1
           mkdir build
     
       - name: configure
         run: |
-          cd qt-everywhere-src-6.11.0/build
+          cd qt-everywhere-src-6.11.1/build
           ../configure -static -release -no-pch -prefix "$GITHUB_WORKSPACE/static-qt" -skip webengine -nomake tests -nomake examples -opensource -confirm-license
       
       - name: Build
         run: |
-          cd qt-everywhere-src-6.11.0/build
+          cd qt-everywhere-src-6.11.1/build
           cmake --build . --parallel
 
       - name: install
         run: |
-          cd qt-everywhere-src-6.11.0/build
+          cd qt-everywhere-src-6.11.1/build
           cmake --install .
 
       - name: pack
